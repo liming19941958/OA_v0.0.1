@@ -10,7 +10,7 @@
                         <div class="f-logo-input">
                             <div class="login-account-number">
                                 <i class="el-icon-user"></i>
-                                <input type="text" v-model="username" class="login-input" placeholder="登录名/手机/邮箱" v-focus>
+                                <input type="text" v-model="name" class="login-input" placeholder="登录名/手机/邮箱" v-focus>
                             </div>
                             <div class="login-account-password">
                                 <i class="el-icon-lock"></i>
@@ -46,20 +46,25 @@
         },
         data(){
             return {
-                username:'admin',
+                name:'admin',
                 password:'123456'
             }
         },
 
         methods:{
             login(){
-                this.$http.post('user/login',{account:this.username,passWord:this.password}).then(res=>{
+                this.$http.get('api/platform/users/login',{
+                    params:{
+                        loginName:this.name,
+                        password:this.password
+                    }
+                }).then(res=>{
                     if(res.status===200){
-                        let tokenid = res.body.result.TokenId;
+                       console.log(res);
                         // this.setUserName(this.userName)
-                        sessionStorage.setItem('token', tokenid);
-                        var lastname = sessionStorage.getItem("token");
-                        console.log("login"+lastname);
+                        // sessionStorage.setItem('token', tokenid);
+                        // var lastname = sessionStorage.getItem("token");
+                        // console.log("login"+lastname);
                         this.$message({
                             message:'登录成功',
                             type:'success'
