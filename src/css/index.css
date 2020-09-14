@@ -1,5 +1,19 @@
-
-   ::-webkit-scrollbar {
+.ant-form-item-label > label {
+    color: #666666!important;
+}
+.ant-input {
+    width: 93%;
+}
+.btn1{
+    width: 70px;
+    margin-left: 15px;
+    background-color: #10c4a7!important;
+    border: none
+}
+.btn1:hover {
+    background-color: #0e7561 !important;
+}
+::-webkit-scrollbar {
        width: 0.55rem;
        height: 0.25rem;
    }

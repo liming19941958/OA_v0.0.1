@@ -1,6 +1,6 @@
 <template>
     <div class="login-page">
-        <transition>
+<!--        <transition>-->
             <div class="f-login-container">
                 <div class="f-logo">
                     <h1>智能楼宇系统</h1>
@@ -23,13 +23,26 @@
                         </div>
                     </form>
                 </div>
-
+                <div>
+                    <a-modal
+                            v-model="visible"
+                    >
+                        <p style="margin-left: 55px;">{{errorMsg}}</p>
+                        <span  slot="title" >
+                            <a-icon type="exclamation-circle" style="color: #ffcf31" />
+                            <span>
+                                提 示
+                            </span>
+                        </span>
+                        <a-button type="primary" slot="footer" @click="visible=false">关 闭</a-button>
+                    </a-modal>
+                </div>
                 <div class="f-bottom-mes">
                     <p class="f-version">物联微电子有限公司</p>
-                    <p class="f-version">版本：0.0.1</p>
+                    <p class="f-version">version：{{version}}</p>
                 </div>
             </div>
-        </transition>
+<!--        </transition>-->
     </div>
 
 </template>
@@ -46,38 +59,68 @@
         },
         data(){
             return {
+                visible: false,
+                errorMsg:'',
+                version:'',
                 name:'admin',
                 password:'123456'
             }
         },
-
+        created(){
+            this.getVersion();
+        },
         methods:{
+            getVersion(){
+                this.$http.get('api/platform/users/version').then(res=>{
+                    this.version = res.body;
+                    console.log(res.body)
+                })
+            },
             login(){
-                this.$http.get('api/platform/users/login',{
-                    params:{
-                        loginName:this.name,
-                        password:this.password
-                    }
-                }).then(res=>{
-                    if(res.status===200){
-                       console.log(res);
-                        // this.setUserName(this.userName)
-                        // sessionStorage.setItem('token', tokenid);
-                        // var lastname = sessionStorage.getItem("token");
-                        // console.log("login"+lastname);
-                        this.$message({
-                            message:'登录成功',
-                            type:'success'
-                        })
-                        this.$router.push('/home')
-                    }else{
-                        this.$message({
-                            message:'用户名或者密码错误',
-                            type:'error'
-                        })
+                console.log(this.name)
+                console.log(this.password)
+
+                if (this.name !='' && this.password !=''){
+                    this.$http.get('api/platform/users/login',{
+                        params:{
+                            loginName:this.name,
+                            password:this.password
+                        }
+                    }).then(res=>{
+                        if(res.status===200){
+                            // this.setUserName(this.userName)
+                            // sessionStorage.setItem('token', tokenid);
+                            // var lastname = sessionStorage.getItem("token");
+                            // console.log("login"+lastname);
+                            if (res.body.IsSuc){
+                                this.getDisPlayName();
+                                this.$message({
+                                    message:'登录成功',
+                                    type:'success'
+                                })
+                                this.$router.push('/home')
+                            }else{
+                                this.errorMsg = '用户名或密码错误！';
+                                this.visible = true;
+                            }
+                        }
+                    })
+                } else{
+                    this.errorMsg = '登录名或密码不能为空！';
+                    this.visible = true;
+                }
+
+            },
+            getDisPlayName(){
+                this.$http.get('api/Building/Business/getDisPlayName').then(res=>{
+                    if (res.body.IsSuc){
+                        let username = res.body.Result;
+                        this.$store.commit('setUser',username)
+                    }else {
+                        this.$store.commit('setUser','Admin');
                     }
                 })
-            }
+            },
         }
     }
 </script>
@@ -113,6 +156,7 @@
             margin: 150px auto;
             color: #ffffff;
             text-align: center;
+
             h1{
                 font-size: 70px;
             }

@@ -1,6 +1,54 @@
 <template>
-    <div class="menu">
-    </div>
+
+        <div style="width: 207px;height: 100%;">
+            <a-menu
+                    :default-selected-keys="['1']"
+                    :default-open-keys="['sub1']"
+                    :mode="mode"
+                    :theme="theme"
+                    :inline-collapsed="$store.state.collapsed">
+                <a-menu-item key="1">
+                    <a-icon type="mail" />
+                   <span>Navigation One</span>
+                </a-menu-item>
+                <a-menu-item key="2">
+                    <a-icon type="calendar" />
+                    <span>Navigation Two</span>
+                </a-menu-item>
+                <a-sub-menu key="sub1">
+                    <span slot="title"><a-icon type="appstore" /><span>Navigation Three</span></span>
+                    <a-menu-item key="3">
+                        Option 3
+                    </a-menu-item>
+                    <a-menu-item key="4">
+                        Option 4
+                    </a-menu-item>
+                    <a-sub-menu key="sub1-2" title="Submenu">
+                        <a-menu-item key="5">
+                            Option 5
+                        </a-menu-item>
+                        <a-menu-item key="6">
+                            Option 6
+                        </a-menu-item>
+                    </a-sub-menu>
+                </a-sub-menu>
+                <a-sub-menu key="sub2">
+                    <span slot="title"><a-icon type="setting" /><span>Navigation Four</span></span>
+                    <a-menu-item key="7">
+                        Option 7
+                    </a-menu-item>
+                    <a-menu-item key="8">
+                        Option 8
+                    </a-menu-item>
+                    <a-menu-item key="9">
+                        Option 9
+                    </a-menu-item>
+                    <a-menu-item key="10">
+                        Option 10
+                    </a-menu-item>
+                </a-sub-menu>
+            </a-menu>
+        </div>
 </template>
 
 <script>
@@ -8,16 +56,17 @@
         name: "tab",
         data(){
             return {
+                mode: 'vertical',
+                theme: 'dark',
 
             }
+        },
+        methods:{
+
         }
     }
 </script>
 
 <style scoped lang="scss">
-  .menu{
-      width: 100%;
-      height: 100%;
-      background-color: #a1ff63;
-  }
+
 </style>

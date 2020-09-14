@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './css/index.less'
@@ -11,6 +13,8 @@ import router from './router.js'
 import 'bootstrap/dist/css/bootstrap.css'
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
+import store from './store/index'
+Vue.use(Antd);
 Vue.prototype.$qs = qs;
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
@@ -57,14 +61,14 @@ Vue.prototype.changeDateTime = function (time){//changeData是函数名
 //如果我们通过全局配置了请求数据的接口 根域名，则在每次单独发起
 // http 请求的时候，请求的url 路径，应该以相对路径 开头，
 // 前面不带 “/”，否则，不会启动根路径做拼接
-Vue.http.options.root = 'http://192.168.1.127:9002/';
-// Vue.http.options.root = 'http://localhost:9002/';
+// Vue.http.options.root = 'http://192.168.1.127:9002/';
+Vue.http.options.root = 'http://localhost:9002/';
 
 Vue.http.interceptors.push((request,next)  =>{
 
-  var lastname = sessionStorage.getItem("token");
+  // var lastname = sessionStorage.getItem("token");
   var path = sessionStorage.getItem("Path");
-    request.headers.set('token',lastname);
+    // request.headers.set('token',lastname);
     request.headers.set('requestPage',path);
   next((response) => {
     return response
@@ -75,6 +79,7 @@ Vue.http.interceptors.push((request,next)  =>{
 Vue.http.options.emulateJSON = true;
 new Vue({
   render: h => h(App),
-  router
+  router,
+  store  //将vuex创建的 store 挂载到  VM 实例上，任何组件都可以通过store存取数据
 }).$mount('#app');
 
